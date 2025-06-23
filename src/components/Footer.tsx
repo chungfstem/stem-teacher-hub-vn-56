@@ -54,7 +54,7 @@ const Footer = () => {
               Đăng ký nhận thông tin mới nhất
             </h3>
             <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
-              Nhận thông báo về các tài liệu mới, hội thảo và cập nhật từ cộng đồng STEM4Teachers
+              Nhận thông báo về các tài liệu mới, hội thảo và cập nhật từ cộng đồng Fstem
             </p>
             <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
               <Input
@@ -77,9 +77,9 @@ const Footer = () => {
           <div className="lg:col-span-1">
             <div className="flex items-center mb-4">
               <div className="w-10 h-10 bg-gradient-to-r from-stem-primary to-stem-secondary rounded-lg flex items-center justify-center mr-3">
-                <span className="text-white font-bold text-lg">S</span>
+                <span className="text-white font-bold text-lg">F</span>
               </div>
-              <span className="text-xl font-bold">STEM4Teachers.vn</span>
+              <span className="text-xl font-bold">Fstem.asia</span>
             </div>
             <p className="text-gray-400 mb-6">
               Nền tảng chia sẻ tài nguyên STEM hàng đầu dành cho giáo viên Việt Nam
@@ -126,7 +126,7 @@ const Footer = () => {
               <Mail className="w-5 h-5 text-stem-primary" />
               <div>
                 <div className="font-medium">Email</div>
-                <div className="text-gray-400">contact@stem4teachers.vn</div>
+                <div className="text-gray-400">contact@fstem.asia</div>
               </div>
             </div>
             <div className="flex items-center space-x-3">
@@ -149,7 +149,7 @@ const Footer = () => {
         {/* Bottom */}
         <div className="mt-8 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
           <div className="text-gray-400 text-sm">
-            © 2024 STEM4Teachers.vn. Tất cả quyền được bảo lưu.
+            © 2024 Fstem.asia. Tất cả quyền được bảo lưu.
           </div>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <a href="/privacy" className="text-gray-400 hover:text-white text-sm transition-colors">

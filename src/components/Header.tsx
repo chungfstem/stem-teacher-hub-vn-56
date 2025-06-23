@@ -24,9 +24,9 @@ const Header = () => {
           <div className="flex items-center">
             <div className="flex-shrink-0 flex items-center">
               <div className="w-10 h-10 bg-gradient-to-br from-stem-primary to-stem-secondary rounded-lg flex items-center justify-center mr-3">
-                <span className="text-white font-bold text-lg">S</span>
+                <span className="text-white font-bold text-lg">F</span>
               </div>
-              <span className="text-xl font-bold text-gray-900">STEM4Teachers.vn</span>
+              <span className="text-xl font-bold text-gray-900">Fstem.asia</span>
             </div>
           </div>
 
