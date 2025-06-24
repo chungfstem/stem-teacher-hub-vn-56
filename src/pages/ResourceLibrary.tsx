@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Image, Video, FileText, Download, Play, Eye, Heart, Search, Filter, Grid, List, Folder, Star } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -6,6 +5,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useAuth } from '@/contexts/AuthContext';
+import AuthModal from '@/components/AuthModal';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -13,6 +14,8 @@ const ResourceLibrary = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const { isAuthenticated } = useAuth();
 
   const resources = [
     {
@@ -192,6 +195,15 @@ const ResourceLibrary = () => {
     return labels[type] || type;
   };
 
+  const handleActionClick = () => {
+    if (!isAuthenticated) {
+      setShowAuthModal(true);
+    } else {
+      // Thực hiện hành động
+      console.log('Thực hiện hành động');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <Header />
@@ -280,7 +292,11 @@ const ResourceLibrary = () => {
                     className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <Button size="sm" className="bg-white text-gray-900 hover:bg-gray-100">
+                    <Button 
+                      size="sm" 
+                      className="bg-white text-gray-900 hover:bg-gray-100"
+                      onClick={handleActionClick}
+                    >
                       <Play className="w-4 h-4 mr-2" />
                       Xem
                     </Button>
@@ -329,11 +345,17 @@ const ResourceLibrary = () => {
                   </div>
                   
                   <div className="flex gap-2">
-                    <Button className="flex-1 bg-stem-primary hover:bg-stem-primary/90">
+                    <Button 
+                      className="flex-1 bg-stem-primary hover:bg-stem-primary/90"
+                      onClick={handleActionClick}
+                    >
                       <Download className="w-4 h-4 mr-2" />
                       Tải về
                     </Button>
-                    <Button variant="outline">
+                    <Button 
+                      variant="outline"
+                      onClick={handleActionClick}
+                    >
                       <Eye className="w-4 h-4" />
                     </Button>
                   </div>
@@ -380,11 +402,20 @@ const ResourceLibrary = () => {
                     </div>
                     
                     <div className="flex gap-1">
-                      <Button size="sm" className="flex-1 text-xs bg-stem-primary hover:bg-stem-primary/90">
+                      <Button 
+                        size="sm" 
+                        className="flex-1 text-xs bg-stem-primary hover:bg-stem-primary/90"
+                        onClick={handleActionClick}
+                      >
                         <Download className="w-3 h-3 mr-1" />
                         Tải
                       </Button>
-                      <Button size="sm" variant="outline" className="text-xs">
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        className="text-xs"
+                        onClick={handleActionClick}
+                      >
                         <Eye className="w-3 h-3" />
                       </Button>
                     </div>
@@ -428,11 +459,17 @@ const ResourceLibrary = () => {
                       </div>
                       
                       <div className="flex gap-2">
-                        <Button className="bg-stem-primary hover:bg-stem-primary/90">
+                        <Button 
+                          className="bg-stem-primary hover:bg-stem-primary/90"
+                          onClick={handleActionClick}
+                        >
                           <Download className="w-4 h-4 mr-2" />
                           Tải về
                         </Button>
-                        <Button variant="outline">
+                        <Button 
+                          variant="outline"
+                          onClick={handleActionClick}
+                        >
                           <Eye className="w-4 h-4" />
                         </Button>
                       </div>
@@ -453,6 +490,12 @@ const ResourceLibrary = () => {
       </div>
 
       <Footer />
+
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        defaultMode="login"
+      />
     </div>
   );
 };

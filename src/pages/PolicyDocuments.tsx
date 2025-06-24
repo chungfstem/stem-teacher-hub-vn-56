@@ -1,16 +1,19 @@
-
 import React, { useState } from 'react';
 import { FileText, Download, Calendar, Building, Search, Filter, ChevronDown, ExternalLink } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useAuth } from '@/contexts/AuthContext';
+import AuthModal from '@/components/AuthModal';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 const PolicyDocuments = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const { isAuthenticated } = useAuth();
 
   const documents = [
     {
@@ -112,6 +115,15 @@ const PolicyDocuments = () => {
       'Khung chương trình': 'bg-cyan-100 text-cyan-800'
     };
     return colors[category] || 'bg-gray-100 text-gray-800';
+  };
+
+  const handleActionClick = () => {
+    if (!isAuthenticated) {
+      setShowAuthModal(true);
+    } else {
+      // Thực hiện hành động tải xuống hoặc xem
+      console.log('Thực hiện hành động');
+    }
   };
 
   return (
@@ -235,11 +247,17 @@ const PolicyDocuments = () => {
                   </div>
                   
                   <div className="flex flex-col gap-2">
-                    <Button className="bg-stem-primary hover:bg-stem-primary/90">
+                    <Button 
+                      className="bg-stem-primary hover:bg-stem-primary/90"
+                      onClick={handleActionClick}
+                    >
                       <Download className="w-4 h-4 mr-2" />
                       Tải xuống
                     </Button>
-                    <Button variant="outline">
+                    <Button 
+                      variant="outline"
+                      onClick={handleActionClick}
+                    >
                       <ExternalLink className="w-4 h-4 mr-2" />
                       Xem trước
                     </Button>
@@ -259,6 +277,12 @@ const PolicyDocuments = () => {
       </div>
 
       <Footer />
+
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        defaultMode="login"
+      />
     </div>
   );
 };

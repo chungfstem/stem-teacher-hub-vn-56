@@ -12,7 +12,6 @@ import NewsEvents from "./pages/NewsEvents";
 import ResourceLibrary from "./pages/ResourceLibrary";
 import AdvancedSearch from "./pages/AdvancedSearch";
 import NotFound from "./pages/NotFound";
-import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
@@ -25,46 +24,11 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route 
-              path="/documents" 
-              element={
-                <ProtectedRoute>
-                  <PolicyDocuments />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/lessons" 
-              element={
-                <ProtectedRoute>
-                  <LessonsProjects />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/news" 
-              element={
-                <ProtectedRoute>
-                  <NewsEvents />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/library" 
-              element={
-                <ProtectedRoute>
-                  <ResourceLibrary />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/community" 
-              element={
-                <ProtectedRoute>
-                  <ResourceLibrary />
-                </ProtectedRoute>
-              } 
-            />
+            <Route path="/documents" element={<PolicyDocuments />} />
+            <Route path="/lessons" element={<LessonsProjects />} />
+            <Route path="/news" element={<NewsEvents />} />
+            <Route path="/library" element={<ResourceLibrary />} />
+            <Route path="/community" element={<ResourceLibrary />} />
             <Route path="/search" element={<AdvancedSearch />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

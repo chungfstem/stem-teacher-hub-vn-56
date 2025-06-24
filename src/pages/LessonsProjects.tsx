@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { BookOpen, Play, Download, Eye, Heart, Star, Clock, Users, Tag, Filter, Search } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -6,6 +5,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useAuth } from '@/contexts/AuthContext';
+import AuthModal from '@/components/AuthModal';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -13,6 +14,8 @@ const LessonsProjects = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLevel, setSelectedLevel] = useState('all');
   const [selectedSubject, setSelectedSubject] = useState('all');
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const { isAuthenticated } = useAuth();
 
   const lessons = [
     {
@@ -142,6 +145,15 @@ const LessonsProjects = () => {
       case 'Trung bình': return 'bg-yellow-100 text-yellow-800';
       case 'Khó': return 'bg-red-100 text-red-800';
       default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const handleActionClick = () => {
+    if (!isAuthenticated) {
+      setShowAuthModal(true);
+    } else {
+      // Thực hiện hành động
+      console.log('Thực hiện hành động');
     }
   };
 
@@ -290,14 +302,23 @@ const LessonsProjects = () => {
                 </div>
 
                 <div className="flex gap-2">
-                  <Button className="flex-1 bg-stem-primary hover:bg-stem-primary/90">
+                  <Button 
+                    className="flex-1 bg-stem-primary hover:bg-stem-primary/90"
+                    onClick={handleActionClick}
+                  >
                     <Download className="w-4 h-4 mr-2" />
                     Tải xuống
                   </Button>
-                  <Button variant="outline">
+                  <Button 
+                    variant="outline"
+                    onClick={handleActionClick}
+                  >
                     <Eye className="w-4 h-4" />
                   </Button>
-                  <Button variant="outline">
+                  <Button 
+                    variant="outline"
+                    onClick={handleActionClick}
+                  >
                     <Play className="w-4 h-4" />
                   </Button>
                 </div>
@@ -315,6 +336,12 @@ const LessonsProjects = () => {
       </div>
 
       <Footer />
+
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        defaultMode="login"
+      />
     </div>
   );
 };
