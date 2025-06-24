@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import PolicyDocuments from "./pages/PolicyDocuments";
 import LessonsProjects from "./pages/LessonsProjects";
@@ -24,11 +25,23 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/documents" element={<PolicyDocuments />} />
+            <Route path="/documents" element={
+              <ProtectedRoute>
+                <PolicyDocuments />
+              </ProtectedRoute>
+            } />
             <Route path="/lessons" element={<LessonsProjects />} />
             <Route path="/news" element={<NewsEvents />} />
-            <Route path="/library" element={<ResourceLibrary />} />
-            <Route path="/community" element={<ResourceLibrary />} />
+            <Route path="/library" element={
+              <ProtectedRoute>
+                <ResourceLibrary />
+              </ProtectedRoute>
+            } />
+            <Route path="/community" element={
+              <ProtectedRoute>
+                <ResourceLibrary />
+              </ProtectedRoute>
+            } />
             <Route path="/search" element={<AdvancedSearch />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
