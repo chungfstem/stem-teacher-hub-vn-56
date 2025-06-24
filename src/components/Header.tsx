@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Menu, X, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLocation } from 'react-router-dom';
 import AuthModal from './AuthModal';
 
 const Header = () => {
@@ -10,15 +11,20 @@ const Header = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
   const { isAuthenticated, user, logout } = useAuth();
+  const location = useLocation();
 
   const menuItems = [
-    { title: 'Trang chủ', href: '/', active: true },
+    { title: 'Trang chủ', href: '/' },
     { title: 'Tài liệu', href: '/documents' },
     { title: 'Bài giảng', href: '/lessons' },
     { title: 'Tin tức', href: '/news' },
     { title: 'Thư viện', href: '/library' },
     { title: 'Cộng đồng', href: '/community' },
   ];
+
+  const isActiveRoute = (href: string) => {
+    return location.pathname === href;
+  };
 
   const handleAuthClick = (mode: 'login' | 'register') => {
     setAuthMode(mode);
@@ -51,13 +57,16 @@ const Header = () => {
                 <a
                   key={item.title}
                   href={item.href}
-                  className={`px-3 py-2 text-sm font-medium transition-colors duration-200 hover:bg-gray-100 rounded-md ${
-                    item.active 
-                      ? 'text-stem-primary border-b-2 border-stem-primary' 
+                  className={`px-3 py-2 text-sm font-medium transition-colors duration-200 hover:bg-gray-100 rounded-md relative ${
+                    isActiveRoute(item.href)
+                      ? 'text-stem-primary' 
                       : 'text-gray-700 hover:text-stem-primary'
                   }`}
                 >
                   {item.title}
+                  {isActiveRoute(item.href) && (
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-stem-primary transition-all duration-300"></div>
+                  )}
                 </a>
               ))}
             </nav>
@@ -119,7 +128,7 @@ const Header = () => {
                     key={item.title}
                     href={item.href}
                     className={`block px-3 py-2 text-base font-medium rounded-md transition-colors ${
-                      item.active 
+                      isActiveRoute(item.href)
                         ? 'text-stem-primary bg-stem-primary/10' 
                         : 'text-gray-700 hover:text-stem-primary hover:bg-gray-50'
                     }`}
