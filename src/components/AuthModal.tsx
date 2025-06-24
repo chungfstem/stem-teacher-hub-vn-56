@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Dialog,
   DialogContent,
@@ -17,9 +18,15 @@ interface AuthModalProps {
 
 const AuthModal = ({ isOpen, onClose, defaultMode = 'login' }: AuthModalProps) => {
   const [mode, setMode] = useState<'login' | 'register'>(defaultMode);
+  const navigate = useNavigate();
 
   const handleSuccess = () => {
     onClose();
+  };
+
+  const handleClose = () => {
+    onClose();
+    navigate('/');
   };
 
   const resetMode = () => {
@@ -33,7 +40,7 @@ const AuthModal = ({ isOpen, onClose, defaultMode = 'login' }: AuthModalProps) =
   }, [isOpen, defaultMode]);
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="text-center">
