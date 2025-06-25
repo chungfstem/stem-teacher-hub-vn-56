@@ -101,7 +101,7 @@ const Header = () => {
                 <>
                   <Button 
                      variant="outline"
-                    className="bg-yellow-400 hover:bg-yellow-500 text-white  font-semibold"
+                    className="bg-white-400 hover:bg-white-500 text-black  font-semibold"
                     onClick={() => handleAuthClick('register')}
                   >
                     Đăng nhập
