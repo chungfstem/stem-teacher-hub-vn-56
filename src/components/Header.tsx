@@ -101,7 +101,10 @@ const Header = () => {
                 <>
                   <Button 
                      variant="outline"
-                    className="hover:bg-white-500 text-black-background: linear-gradient(to right, #3498db 50%, #2ecc71 50%); font-semibold"
+                    className="relative overflow-hidden text-gray-900 font-semibold px-6 py-2
+             bg-gradient-to-r from-yellow-400 to-yellow-400 
+             bg-[length:200%_100%] bg-left 
+             hover:bg-right transition-all duration-500 ease-out"
                     onClick={() => handleAuthClick('register')}
                   >
                     Đăng nhập
