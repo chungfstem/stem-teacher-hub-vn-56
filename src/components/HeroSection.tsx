@@ -43,7 +43,6 @@ const HeroSection = () => {
 
   const handleExploreClick = () => {
     if (isAuthenticated) {
-      // Navigate to documents or show available content
       navigate('/documents');
     } else {
       setAuthMode('login');
@@ -52,13 +51,9 @@ const HeroSection = () => {
   };
 
   const handleShareClick = () => {
-    if (isAuthenticated) {
-      // Navigate to documents page for sharing
-      navigate('/documents');
-    } else {
-      setAuthMode('register');
-      setShowAuthModal(true);
-    }
+    // Luôn mở form đăng nhập khi click chia sẻ tài liệu
+    setAuthMode('login');
+    setShowAuthModal(true);
   };
 
   return (

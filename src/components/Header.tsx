@@ -1,9 +1,9 @@
 
 import React, { useState } from 'react';
-import { Menu, X, LogOut } from 'lucide-react';
+import { Menu, X, LogOut, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import AuthModal from './AuthModal';
 
 const Header = () => {
@@ -12,6 +12,7 @@ const Header = () => {
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
   const { isAuthenticated, user, logout } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const menuItems = [
     { title: 'Trang chủ', href: '/' },
@@ -36,18 +37,25 @@ const Header = () => {
     setIsMobileMenuOpen(false);
   };
 
+  const handleLogoClick = () => {
+    navigate('/');
+  };
+
   return (
     <>
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+      <header className="bg-gradient-to-r from-purple-600 via-blue-600 to-teal-600 border-b border-white/20 sticky top-0 z-50 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            {/* Logo */}
+            {/* Logo - Clickable */}
             <div className="flex items-center">
-              <div className="flex-shrink-0 flex items-center">
-                <div className="w-10 h-10 bg-gradient-to-br from-stem-primary to-stem-secondary rounded-lg flex items-center justify-center mr-3">
-                  <span className="text-white font-bold text-lg">F</span>
+              <div 
+                className="flex-shrink-0 flex items-center cursor-pointer hover:opacity-80 transition-opacity"
+                onClick={handleLogoClick}
+              >
+                <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center mr-3 shadow-lg">
+                  <span className="text-white font-bold text-lg">🎓</span>
                 </div>
-                <span className="text-xl font-bold text-gray-900">Fstem.asia</span>
+                <span className="text-xl font-bold text-white drop-shadow-sm">Fstem.asia</span>
               </div>
             </div>
 
@@ -57,15 +65,15 @@ const Header = () => {
                 <a
                   key={item.title}
                   href={item.href}
-                  className={`px-3 py-2 text-sm font-medium transition-colors duration-200 hover:bg-gray-100 rounded-md relative ${
+                  className={`px-3 py-2 text-sm font-medium transition-all duration-300 hover:bg-white/10 rounded-md relative ${
                     isActiveRoute(item.href)
-                      ? 'text-stem-primary' 
-                      : 'text-gray-700 hover:text-stem-primary'
+                      ? 'text-yellow-300 shadow-sm' 
+                      : 'text-white/90 hover:text-white'
                   }`}
                 >
                   {item.title}
                   {isActiveRoute(item.href) && (
-                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-stem-primary transition-all duration-300"></div>
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-yellow-300 transition-all duration-300 shadow-sm"></div>
                   )}
                 </a>
               ))}
@@ -75,12 +83,15 @@ const Header = () => {
             <div className="hidden md:flex items-center space-x-4">
               {isAuthenticated ? (
                 <div className="flex items-center space-x-4">
-                  <span className="text-sm text-gray-700">Xin chào, {user?.name}</span>
+                  <div className="flex items-center space-x-2 bg-white/10 px-3 py-2 rounded-lg">
+                    <User className="w-4 h-4 text-white" />
+                    <span className="text-sm text-white font-medium">{user?.name}</span>
+                  </div>
                   <Button 
                     variant="outline" 
                     size="sm"
                     onClick={handleLogout}
-                    className="text-gray-600 hover:text-red-600"
+                    className="text-white border-white/30 hover:bg-white/10 hover:text-white"
                   >
                     <LogOut className="w-4 h-4 mr-2" />
                     Đăng xuất
@@ -90,13 +101,13 @@ const Header = () => {
                 <>
                   <Button 
                     variant="outline" 
-                    className="text-stem-primary border-stem-primary hover:bg-stem-primary hover:text-white"
+                    className="text-white border-white/30 hover:bg-white/10 hover:text-white"
                     onClick={() => handleAuthClick('login')}
                   >
                     Đăng nhập
                   </Button>
                   <Button 
-                    className="bg-stem-primary hover:bg-stem-primary/90"
+                    className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold"
                     onClick={() => handleAuthClick('register')}
                   >
                     Đăng ký
@@ -111,7 +122,7 @@ const Header = () => {
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="text-gray-700"
+                className="text-white hover:bg-white/10"
               >
                 {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </Button>
@@ -121,7 +132,7 @@ const Header = () => {
           {/* Mobile Menu */}
           {isMobileMenuOpen && (
             <div className="md:hidden animate-slide-in">
-              <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">
+              <div className="px-2 pt-2 pb-3 space-y-1 bg-black/20 border-t border-white/20 backdrop-blur-sm">
                 {/* Mobile Menu Items */}
                 {menuItems.map((item) => (
                   <a
@@ -129,8 +140,8 @@ const Header = () => {
                     href={item.href}
                     className={`block px-3 py-2 text-base font-medium rounded-md transition-colors ${
                       isActiveRoute(item.href)
-                        ? 'text-stem-primary bg-stem-primary/10' 
-                        : 'text-gray-700 hover:text-stem-primary hover:bg-gray-50'
+                        ? 'text-yellow-300 bg-white/10' 
+                        : 'text-white/90 hover:text-white hover:bg-white/10'
                     }`}
                   >
                     {item.title}
@@ -141,12 +152,13 @@ const Header = () => {
                 <div className="pt-4 space-y-2">
                   {isAuthenticated ? (
                     <div className="space-y-2">
-                      <div className="px-3 py-2 text-sm text-gray-700">
-                        Xin chào, {user?.name}
+                      <div className="px-3 py-2 text-sm text-white flex items-center space-x-2">
+                        <User className="w-4 h-4" />
+                        <span>{user?.name}</span>
                       </div>
                       <Button 
                         variant="outline" 
-                        className="w-full text-gray-600 hover:text-red-600"
+                        className="w-full text-white border-white/30 hover:bg-white/10"
                         onClick={handleLogout}
                       >
                         <LogOut className="w-4 h-4 mr-2" />
@@ -157,7 +169,7 @@ const Header = () => {
                     <>
                       <Button 
                         variant="outline" 
-                        className="w-full text-stem-primary border-stem-primary"
+                        className="w-full text-white border-white/30 hover:bg-white/10"
                         onClick={() => {
                           handleAuthClick('login');
                           setIsMobileMenuOpen(false);
@@ -166,7 +178,7 @@ const Header = () => {
                         Đăng nhập
                       </Button>
                       <Button 
-                        className="w-full bg-stem-primary hover:bg-stem-primary/90"
+                        className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold"
                         onClick={() => {
                           handleAuthClick('register');
                           setIsMobileMenuOpen(false);

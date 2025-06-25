@@ -37,11 +37,7 @@ const App = () => (
                 <ResourceLibrary />
               </ProtectedRoute>
             } />
-            <Route path="/community" element={
-              <ProtectedRoute>
-                <ResourceLibrary />
-              </ProtectedRoute>
-            } />
+            <Route path="/community" element={<ResourceLibrary />} />
             <Route path="/search" element={<AdvancedSearch />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
