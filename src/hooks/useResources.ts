@@ -86,10 +86,27 @@ export const useCreateResource = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: async (resource: Partial<Resource>) => {
+    mutationFn: async (resource: {
+      title: string;
+      resource_type: 'document' | 'video' | 'lesson' | 'project' | 'news';
+      description?: string;
+      content?: string;
+      category_id?: string;
+      file_url?: string;
+      thumbnail_url?: string;
+      is_published?: boolean;
+      difficulty_level?: 'beginner' | 'intermediate' | 'advanced';
+      tags?: string[];
+    }) => {
+      const { data: user } = await supabase.auth.getUser();
+      if (!user.user) throw new Error('User not authenticated');
+
       const { data, error } = await supabase
         .from('resources')
-        .insert([resource])
+        .insert([{
+          ...resource,
+          author_id: user.user.id
+        }])
         .select()
         .single();
 
