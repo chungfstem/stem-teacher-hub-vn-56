@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 import AuthModal from './AuthModal';
 
 interface ProtectedRouteProps {
@@ -9,14 +9,24 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute = ({ children, fallback }: ProtectedRouteProps) => {
-  const { isAuthenticated } = useAuth();
-  const [showAuthModal, setShowAuthModal] = useState(!isAuthenticated);
+  const { user, loading } = useAuth();
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   React.useEffect(() => {
-    setShowAuthModal(!isAuthenticated);
-  }, [isAuthenticated]);
+    if (!loading && !user) {
+      setShowAuthModal(true);
+    }
+  }, [user, loading]);
 
-  if (!isAuthenticated) {
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-stem-primary"></div>
+      </div>
+    );
+  }
+
+  if (!user) {
     return (
       <>
         {fallback}

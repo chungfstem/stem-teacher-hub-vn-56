@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 
 interface RegisterFormProps {
@@ -17,7 +17,7 @@ const RegisterForm = ({ onSuccess, onSwitchToLogin }: RegisterFormProps) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { register } = useAuth();
+  const { signUp } = useAuth();
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -44,12 +44,20 @@ const RegisterForm = ({ onSuccess, onSwitchToLogin }: RegisterFormProps) => {
     setIsLoading(true);
 
     try {
-      await register(email, password, name);
-      toast({
-        title: "Đăng ký thành công",
-        description: "Chào mừng bạn đến với Fstem.asia!",
-      });
-      onSuccess();
+      const { error } = await signUp(email, password, name);
+      if (error) {
+        toast({
+          title: "Lỗi đăng ký",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Đăng ký thành công",
+          description: "Chào mừng bạn đến với Fstem.asia!",
+        });
+        onSuccess();
+      }
     } catch (error) {
       toast({
         title: "Lỗi đăng ký",

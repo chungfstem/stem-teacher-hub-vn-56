@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 
 interface LoginFormProps {
@@ -15,7 +15,7 @@ const LoginForm = ({ onSuccess, onSwitchToRegister }: LoginFormProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const { signIn } = useAuth();
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -23,12 +23,20 @@ const LoginForm = ({ onSuccess, onSwitchToRegister }: LoginFormProps) => {
     setIsLoading(true);
 
     try {
-      await login(email, password);
-      toast({
-        title: "Đăng nhập thành công",
-        description: "Chào mừng bạn quay trở lại!",
-      });
-      onSuccess();
+      const { error } = await signIn(email, password);
+      if (error) {
+        toast({
+          title: "Lỗi đăng nhập",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Đăng nhập thành công",
+          description: "Chào mừng bạn quay trở lại!",
+        });
+        onSuccess();
+      }
     } catch (error) {
       toast({
         title: "Lỗi đăng nhập",
