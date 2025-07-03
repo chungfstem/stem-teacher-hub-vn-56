@@ -3,14 +3,14 @@ import React, { useState } from 'react';
 import { BookOpen, Users, Award, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 import AuthModal from './AuthModal';
 import { useNavigate } from 'react-router-dom';
 
 const HeroSection = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
-  const { isAuthenticated } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   const stats = [
@@ -42,7 +42,7 @@ const HeroSection = () => {
   ];
 
   const handleExploreClick = () => {
-    if (isAuthenticated) {
+    if (user) {
       navigate('/documents');
     } else {
       setAuthMode('login');

@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Resource } from '@/types/resource';
 import { getLevelColor, getTypeColor } from '@/utils/resourceStyles';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 import { useState } from 'react';
 import AuthModal from './AuthModal';
 
@@ -16,10 +16,10 @@ interface ResourceCardProps {
 
 const ResourceCard = ({ resource, index }: ResourceCardProps) => {
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const { isAuthenticated } = useAuth();
+  const { user } = useAuth();
 
   const handleActionClick = () => {
-    if (!isAuthenticated) {
+    if (!user) {
       setShowAuthModal(true);
     } else {
       // Thực hiện hành động

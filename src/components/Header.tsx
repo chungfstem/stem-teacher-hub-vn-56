@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Menu, X, LogOut, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 import { useLocation, useNavigate } from 'react-router-dom';
 import AuthModal from './AuthModal';
 
@@ -10,7 +10,7 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
-  const { isAuthenticated, user, logout } = useAuth();
+  const { user, signOut } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -33,7 +33,7 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    logout();
+    signOut();
     setIsMobileMenuOpen(false);
   };
 
@@ -81,11 +81,11 @@ const Header = () => {
 
             {/* Auth Section */}
             <div className="hidden md:flex items-center space-x-4">
-              {isAuthenticated ? (
+              {user ? (
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center space-x-2 bg-white/10 px-3 py-2 rounded-lg">
                     <User className="w-4 h-4 text-white" />
-                    <span className="text-sm text-white font-medium">{user?.name}</span>
+                    <span className="text-sm text-white font-medium">{user.email}</span>
                   </div>
                   <Button 
                     variant="outline" 
@@ -102,7 +102,7 @@ const Header = () => {
                   <Button 
                      variant="outline"
                     className="bg-green-400 hover:bg-white-500 text-white font-semibold"
-                    onClick={() => handleAuthClick('register')}
+                    onClick={() => handleAuthClick('login')}
                   >
                     Đăng nhập
                   </Button>
@@ -151,11 +151,11 @@ const Header = () => {
                 
                 {/* Mobile Auth Buttons */}
                 <div className="pt-4 space-y-2">
-                  {isAuthenticated ? (
+                  {user ? (
                     <div className="space-y-2">
                       <div className="px-3 py-2 text-sm text-white flex items-center space-x-2">
                         <User className="w-4 h-4" />
-                        <span>{user?.name}</span>
+                        <span>{user.email}</span>
                       </div>
                       <Button 
                         variant="outline" 
