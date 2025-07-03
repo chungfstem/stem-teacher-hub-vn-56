@@ -8,25 +8,22 @@ interface AdBannerProps {
   className?: string;
 }
 
-const AdBanner = ({ size = 'medium', className = '' }: AdBannerProps) => {
+const AdBanner = ({ size = 'small', className = '' }: AdBannerProps) => {
   const sizeClasses = {
-    small: 'h-20',
-    medium: 'h-32',
-    large: 'h-48'
+    small: 'h-16',
+    medium: 'h-24',
+    large: 'h-32'
   };
 
   return (
     <Card className={`${sizeClasses[size]} ${className} bg-gradient-to-r from-blue-50 to-purple-50 border-dashed border-2 border-blue-200`}>
-      <CardContent className="flex items-center justify-center h-full p-4">
+      <CardContent className="flex items-center justify-center h-full p-2">
         <div className="text-center">
-          <Badge variant="outline" className="mb-2 text-blue-600 border-blue-300">
+          <Badge variant="outline" className="text-xs text-blue-600 border-blue-300 mb-1">
             Quảng cáo
           </Badge>
-          <p className="text-sm text-gray-500">
-            Không gian quảng cáo - Liên hệ để đặt quảng cáo
-          </p>
-          <p className="text-xs text-gray-400 mt-1">
-            contact@fstem.asia
+          <p className="text-xs text-gray-500">
+            Liên hệ đặt quảng cáo
           </p>
         </div>
       </CardContent>

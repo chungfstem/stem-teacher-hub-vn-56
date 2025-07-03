@@ -41,6 +41,11 @@ const Header = () => {
     navigate('/');
   };
 
+  const handleNavClick = (href: string) => {
+    navigate(href);
+    setIsMobileMenuOpen(false);
+  };
+
   return (
     <>
       <header className="bg-gradient-to-r from-purple-600 via-blue-600 to-teal-600 border-b border/20 sticky top-0 z-50 shadow-lg">
@@ -48,23 +53,25 @@ const Header = () => {
           <div className="flex items-center justify-between h-16">
             {/* Logo - Clickable */}
             <div className="flex items-center">
-              <div 
-                className="flex-shrink-0 flex items-center cursor-pointer hover:opacity-80 transition-opacity"
+              <Button 
+                variant="ghost"
+                className="flex-shrink-0 flex items-center p-0 hover:bg-white/10 rounded-lg transition-colors"
                 onClick={handleLogoClick}
               >
                 <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center mr-3 shadow-lg">
                   <span className="text-white font-bold text-lg">🎓</span>
                 </div>
                 <span className="text-xl font-bold text-white drop-shadow-sm">Fstem.asia</span>
-              </div>
+              </Button>
             </div>
 
             {/* Desktop Menu */}
             <nav className="hidden md:flex space-x-8">
               {menuItems.map((item) => (
-                <a
+                <Button
                   key={item.title}
-                  href={item.href}
+                  variant="ghost"
+                  onClick={() => handleNavClick(item.href)}
                   className={`px-3 py-2 text-sm font-medium transition-all duration-300 hover:bg-white/10 rounded-md relative ${
                     isActiveRoute(item.href)
                       ? 'text-yellow-300 shadow-sm' 
@@ -75,7 +82,7 @@ const Header = () => {
                   {isActiveRoute(item.href) && (
                     <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-yellow-300 transition-all duration-300 shadow-sm"></div>
                   )}
-                </a>
+                </Button>
               ))}
             </nav>
 
@@ -136,17 +143,18 @@ const Header = () => {
               <div className="px-2 pt-2 pb-3 space-y-1 bg-black/20 border-t border-white/20 backdrop-blur-sm">
                 {/* Mobile Menu Items */}
                 {menuItems.map((item) => (
-                  <a
+                  <Button
                     key={item.title}
-                    href={item.href}
-                    className={`block px-3 py-2 text-base font-medium rounded-md transition-colors ${
+                    variant="ghost"
+                    onClick={() => handleNavClick(item.href)}
+                    className={`w-full justify-start px-3 py-2 text-base font-medium rounded-md transition-colors ${
                       isActiveRoute(item.href)
                         ? 'text-yellow-300 bg-white/10' 
                         : 'text-white/90 hover:text-white hover:bg-white/10'
                     }`}
                   >
                     {item.title}
-                  </a>
+                  </Button>
                 ))}
                 
                 {/* Mobile Auth Buttons */}
