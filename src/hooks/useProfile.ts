@@ -9,6 +9,11 @@ export interface Profile {
   bio?: string;
   school?: string;
   grade_level?: string;
+  phone?: string;
+  address?: string;
+  role?: 'admin' | 'customer' | 'student' | 'teacher';
+  is_verified?: boolean;
+  date_of_birth?: string;
   created_at: string;
   updated_at: string;
 }
