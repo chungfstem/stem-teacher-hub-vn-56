@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
+import { Home } from 'lucide-react';
 
 const Auth = () => {
   const [mode, setMode] = useState<'login' | 'register'>('login');
@@ -33,18 +34,34 @@ const Auth = () => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  const handleGoHome = () => {
+    navigate('/');
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
       if (mode === 'register') {
+        // Validation for registration
+        if (!formData.fullName.trim()) {
+          toast({
+            title: "Lỗi",
+            description: "Vui lòng nhập họ và tên",
+            variant: "destructive",
+          });
+          setIsLoading(false);
+          return;
+        }
+
         if (formData.password !== formData.confirmPassword) {
           toast({
             title: "Lỗi",
             description: "Mật khẩu xác nhận không khớp",
             variant: "destructive",
           });
+          setIsLoading(false);
           return;
         }
 
@@ -54,11 +71,19 @@ const Auth = () => {
             description: "Mật khẩu phải có ít nhất 6 ký tự",
             variant: "destructive",
           });
+          setIsLoading(false);
           return;
         }
 
-        const { error } = await signUp(formData.email, formData.password, formData.fullName);
+        console.log('Attempting to sign up with:', {
+          email: formData.email,
+          fullName: formData.fullName,
+          role: formData.role
+        });
+
+        const { error } = await signUp(formData.email, formData.password, formData.fullName, formData.role);
         if (error) {
+          console.error('Sign up error:', error);
           toast({
             title: "Lỗi đăng ký",
             description: error.message,
@@ -67,16 +92,21 @@ const Auth = () => {
         } else {
           toast({
             title: "Đăng ký thành công",
-            description: "Chào mừng bạn đến với Fstem.asia!",
+            description: "Tài khoản đã được tạo thành công! Bạn có thể đăng nhập ngay.",
           });
-          navigate('/');
+          // Switch to login mode after successful registration
+          setMode('login');
+          setFormData(prev => ({ ...prev, password: '', confirmPassword: '' }));
         }
       } else {
+        // Login
+        console.log('Attempting to sign in with:', formData.email);
         const { error } = await signIn(formData.email, formData.password);
         if (error) {
+          console.error('Sign in error:', error);
           toast({
             title: "Lỗi đăng nhập",
-            description: error.message,
+            description: "Email hoặc mật khẩu không đúng. Vui lòng thử lại.",
             variant: "destructive",
           });
         } else {
@@ -84,10 +114,10 @@ const Auth = () => {
             title: "Đăng nhập thành công",
             description: "Chào mừng bạn quay trở lại!",
           });
-          navigate('/');
         }
       }
     } catch (error) {
+      console.error('Auth error:', error);
       toast({
         title: "Lỗi",
         description: error instanceof Error ? error.message : "Có lỗi xảy ra",
@@ -101,8 +131,17 @@ const Auth = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold text-gray-800">
+        <CardHeader className="text-center relative">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleGoHome}
+            className="absolute left-0 top-0 flex items-center gap-2 text-sm"
+          >
+            <Home className="w-4 h-4" />
+            Về trang chủ
+          </Button>
+          <CardTitle className="text-2xl font-bold text-gray-800 mt-8">
             {mode === 'login' ? 'Đăng nhập' : 'Đăng ký tài khoản'}
           </CardTitle>
         </CardHeader>
@@ -111,7 +150,7 @@ const Auth = () => {
             {mode === 'register' && (
               <>
                 <div className="space-y-2">
-                  <Label htmlFor="fullName">Họ và tên</Label>
+                  <Label htmlFor="fullName">Họ và tên *</Label>
                   <Input
                     id="fullName"
                     type="text"
@@ -140,7 +179,7 @@ const Auth = () => {
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">Email *</Label>
               <Input
                 id="email"
                 type="email"
@@ -152,7 +191,7 @@ const Auth = () => {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="password">Mật khẩu</Label>
+              <Label htmlFor="password">Mật khẩu *</Label>
               <Input
                 id="password"
                 type="password"
@@ -160,12 +199,13 @@ const Auth = () => {
                 onChange={(e) => handleInputChange('password', e.target.value)}
                 placeholder="••••••••"
                 required
+                minLength={6}
               />
             </div>
 
             {mode === 'register' && (
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Xác nhận mật khẩu</Label>
+                <Label htmlFor="confirmPassword">Xác nhận mật khẩu *</Label>
                 <Input
                   id="confirmPassword"
                   type="password"
@@ -173,6 +213,7 @@ const Auth = () => {
                   onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
                   placeholder="••••••••"
                   required
+                  minLength={6}
                 />
               </div>
             )}
